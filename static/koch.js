@@ -2,8 +2,8 @@
 var angle = [0, -60, 120, -60]
 function koch(order, size){
 
-    angle_param = 0
-    size_param = 0
+    angle_param = 2
+    size_param = 3
 
     if (order==0){
         draw_line(size, ctx)
