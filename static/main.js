@@ -1,9 +1,6 @@
-
-$(document).ready(function(){
-
-
 var canvas
 var ctx
+
 
 function initialize_canvas(){
 
@@ -14,24 +11,22 @@ function initialize_canvas(){
 
 }
 
-function clear_canvas(room_json) {
+
+function clear_canvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#FEF0DB"
+    ctx.fillStyle = "#7BBF6A"
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
-
-
-initialize_canvas()
-clear_canvas()
-ctx.translate(300,300);
 
 
 function rotate(rotation){
     ctx.rotate(rotation*Math.PI/180);
 }
 
+
 function draw_line(size){
 
+    ctx.strokeStyle = '#FF3030';
     ctx.moveTo(0,0)
     ctx.lineTo(size,0)
     ctx.stroke();
@@ -40,51 +35,63 @@ function draw_line(size){
 }
 
 
+function draw_circle_with_alpha(x,y,radius,color){
 
-function koch(order, size){
-
-    if (order==0){
-        draw_line(size)
-    }
-    else {
-
-        // angle = [0, -60, 120, -60]
-
-        // for (i = 0; i < angle.length; i++) { 
-        //     console.log(i)
-        //     // console.log(order-1)
-        //     rotate(angle[i])
-        //     koch(order-1, size/3)
-            
-        // }  
-
-        rotate(0)
-        koch(order-1, size/3)
-
-        rotate(-60)
-        koch(order-1, size/3)
-
-        rotate(120)
-        koch(order-1, size/3)
-
-        rotate(-60)
-        koch(order-1, size/3)
-
-    }
+    ctx.save();
+    ctx.globalAlpha = Math.pow(0.97,0.5*radius);
+    draw_circle(x,y,radius,color)
+    ctx.restore();
 
 }
 
-function koch_star(order, size){
-    koch(order, size)
-    rotate(120)
-    koch(order, size)
-    rotate(120)
-    koch(order, size)
+
+
+
+
+function draw_circle(x,y,radius,color){
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,radius,0,2*Math.PI,false);
+    ctx.arc(x,y,radius*0.9,0,2*Math.PI, true);
+    ctx.closePath();
+    ctx.fill();
+
 }
 
 
-koch_star(5, 300)
-// koch(2,300)
 
+
+$(document).ready(function(){
+
+    initialize_canvas()
+    clear_canvas()
+
+
+    // draw_circle(200,200,50)
+    // draw_circle(200,200,55,"#FF3030")
+
+    // ctx.translate(100,300);
+    // koch_star(3, 300)
+
+
+    // json = [1,1,[2,2],1, [3], {"a":[1,{"a":[3,1]}],"b":2}, 1]
+    // total = sum_json(json)
+    // console.log(total)
+
+
+    var multiplier = 0
+    function sleep_loop(x,y){
+
+        clear_canvas()
+        recursive_circle(x,y,1+multiplier,1+multiplier)
+        multiplier = multiplier + 2
+        setTimeout(function() {sleep_loop(x,y);}, 40)
+
+    }
+
+    
+    sleep_loop(200,200)
+    // sleep_loop(700,350)
 
 });
